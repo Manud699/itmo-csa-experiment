@@ -32,6 +32,17 @@
       [(parse-atom token) remaining])))
 
 
+(defn parse
+  "Parses the whole program text into a vector of forms."
+  [text]
+  (loop [forms []
+         ts    (tokenize text)]
+    (if (empty? ts)
+      forms
+      (let [[form ts-after] (read-form ts)]
+        (recur (conj forms form) ts-after)))))
+
+
 (comment
   (tokenize "(+ 1 2)")
   (count (tokenize "(print-str \"Hello, world!\")"))
@@ -39,4 +50,5 @@
   (parse-atom "\"hola\"")
   (map parse-atom (tokenize "(+ 1 2)"))
   (read-form ["42" "x" ")"])
-  (read-form (tokenize "(+ 1 (* 2 3))")))
+  (read-form (tokenize "(+ 1 (* 2 3))"))
+  (parse "(setq x 1) (print-char x)"))
