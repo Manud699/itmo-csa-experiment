@@ -1,0 +1,10 @@
+{
+  "indentRainbow.ignoreErrorLanguages": ["clojure"],
+  "[clojure]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "calva.fmt.formatAsYouType": true
+}
