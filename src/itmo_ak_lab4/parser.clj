@@ -13,7 +13,6 @@
     (.startsWith token "\"") (subs token 1 (dec (count token)))
     :else (symbol token)))
 
-
 (defn read-form
   "Reads one form from the tokens. Returns [form remaining-tokens]."
   [tokens]
@@ -31,7 +30,6 @@
       :else
       [(parse-atom token) remaining])))
 
-
 (defn parse
   "Parses the whole program text into a vector of forms."
   [text]
@@ -41,7 +39,6 @@
       forms
       (let [[form ts-after] (read-form ts)]
         (recur (conj forms form) ts-after)))))
-
 
 (comment
   (tokenize "(+ 1 2)")
