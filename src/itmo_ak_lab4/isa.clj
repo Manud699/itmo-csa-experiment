@@ -9,7 +9,7 @@
    :ra 15})
 
 (def instructions
-  "Mnemonic -> opcode (6 bits) and format"
+  "Mnemonic -> opcode (8 bits) and format"
   {:halt {:opcode 0x00 :format :none}     ; 00 0000
    :nop {:opcode 0x01 :format :none}      ; 00 0001
    :add {:opcode 0x02 :format :r}         ; 00 0010
@@ -32,3 +32,34 @@
    :jmp {:opcode 0x22 :format :i}         ; 10 0010
    :jal {:opcode 0x23 :format :i}         ; 10 0011
    :jr {:opcode 0x24 :format :r}})        ; 10 0100
+
+(defn move-type-r [{:keys [op a b c]}]
+  (let [opcode (get-in instructions [op :opcode])
+        reg-a  (get registers a 0)
+        reg-b  (get registers b 0)
+        reg-c  (get registers c 0)]
+    (bit-or (bit-shift-left opcode 24)
+            (bit-shift-left reg-a  20)
+            (bit-shift-left reg-b  16)
+            (bit-shift-left reg-c  12))))
+
+(defn move-type-imm [{:keys [op a b imm]}]
+  (let [op (get-in instructions [op :opcode])
+        reg-a (get registers a)
+        reg-b (get registers b)]
+    (bit-or (bit-shift-left op 24)
+            (bit-shift-left reg-a 20)
+            (bit-shift-left reg-b 16)
+            (bit-and imm 0xFFFF))))
+
+(defn move-type-none [op]
+  (bit-shift-left (get-in instructions [op :opcode]) 24))
+
+(defn encode
+  "instruction map -> 32-bit word"
+  [instruc]
+  (let [op (:op instruc)]
+    (case (get-in instructions [op :format])
+      :none (move-type-none op)
+      :r (move-type-r instruc)
+      :i (move-type-imm instruc))))
