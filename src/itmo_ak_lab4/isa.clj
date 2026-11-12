@@ -45,8 +45,8 @@
 
 (defn move-type-imm [{:keys [op a b imm]}]
   (let [op (get-in instructions [op :opcode])
-        reg-a (get registers a)
-        reg-b (get registers b)]
+        reg-a (get registers a 0)
+        reg-b (get registers b 0)]
     (bit-or (bit-shift-left op 24)
             (bit-shift-left reg-a 20)
             (bit-shift-left reg-b 16)
