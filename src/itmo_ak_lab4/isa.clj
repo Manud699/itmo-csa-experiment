@@ -90,5 +90,5 @@
     (case (get-in instructions [opcode :format])
       :none {:op opcode}
       :r {:op opcode :a a :b b :c c}
-      :i {:op opcode :a a :b b :imm imm}))) x
+      :i {:op opcode :a a :b b :imm imm})))
 
